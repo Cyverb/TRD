@@ -1066,7 +1066,21 @@ document.addEventListener('DOMContentLoaded', async function() {
     
     // Start auto-sync for real-time updates
     startAutoSync();
-    
+
+    // ← INSERT ENTER KEY SUPPORT HERE
+    const loginInput = document.getElementById('username'); // or your input ID
+    const passwordInput = document.getElementById('password'); // or your input ID
+    const loginButton = document.getElementById('loginButton'); // your login button ID
+
+    [loginInput, passwordInput].forEach(input => {
+        input.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                loginButton.click(); // trigger login
+            }
+        });
+    });
+    // ↑ END OF ENTER KEY SUPPORT
+
     // Add page visibility change listener for mobile
     document.addEventListener('visibilitychange', function() {
         if (!document.hidden) {
@@ -1079,6 +1093,8 @@ document.addEventListener('DOMContentLoaded', async function() {
             });
         }
     });
+});
+
     
     const passwordInput = document.getElementById('password');
     if (passwordInput) {
@@ -1167,3 +1183,4 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style); 
+
