@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Regulations Department - Site-45</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <h1>TRD</h1>
+                <span class="subtitle">The Regulations Department</span>
+            </div>
+            <div class="header-controls">
+                <div class="clearance-display">
+                    <span class="clearance-badge" id="currentClearance">L1</span>
+                </div>
+                <button class="logout-btn" id="logoutBtn" onclick="logout()" style="display: none;">LOGOUT</button>
+            </div>
+        </header>
+
+        <div class="login-section" id="loginSection">
+            <div class="login-card">
+                <h2>Clearance Authentication</h2>
+                <p>Enter your clearance credentials to access TRD systems</p>
+                <div class="input-group">
+                    <input type="text" id="username" placeholder="Username" required>
+                    <input type="password" id="password" placeholder="Password" required>
+                </div>
+                <button onclick="authenticate()" class="auth-btn">AUTHENTICATE</button>
+                
+                <div class="demo-credentials">
+                    <h3>Demo Credentials:</h3>
+                    <p><strong>Master Admin:</strong> master / trdmaster2024</p>
+                    <p><strong>L1 Clearance:</strong> recruit / basic</p>
+                    <p><strong>L2 Clearance:</strong> agent / standard</p>
+                    <p><strong>L3 Clearance:</strong> supervisor / advanced</p>
+                    <p><strong>L4 Clearance:</strong> admin / trd2024</p>
+                    <p><strong>L5 Clearance:</strong> director / classified</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content" id="mainContent" style="display: none;">
+            <nav class="nav-menu">
+                <button class="nav-btn active" onclick="showSection('dashboard')">Dashboard</button>
+                <button class="nav-btn" onclick="showSection('personnel')">Personnel</button>
+                <button class="nav-btn" onclick="showSection('codex')">Codex Enforcement</button>
+                <button class="nav-btn" onclick="showSection('interrogations')">Interrogations</button>
+                <button class="nav-btn" onclick="showSection('incidents')">Site-45 Incidents</button>
+                <button class="nav-btn l2-only" onclick="showSection('reports')">Reports</button>
+                <button class="nav-btn l3-only" onclick="showSection('operations')">Operations</button>
+                <button class="nav-btn l4-only" onclick="showSection('classified')">Classified</button>
+                <button class="nav-btn l5-only" onclick="showSection('directorate')">Directorate</button>
+            </nav>
+
+            <section id="dashboard" class="content-section active">
+                <h2>TRD Dashboard - Site-45</h2>
+                <div class="dashboard-grid">
+                    <div class="stat-card">
+                        <h3>Active Personnel</h3>
+                        <span class="stat-number" id="activePersonnelCount">47</span>
+                        <div class="stat-actions l4-plus">
+                            <button class="edit-stat-btn" onclick="editStat('personnel')">Edit</button>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Open Cases</h3>
+                        <span class="stat-number" id="openCasesCount">12</span>
+                        <div class="stat-actions l4-plus">
+                            <button class="edit-stat-btn" onclick="editStat('cases')">Edit</button>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Codex Violations</h3>
+                        <span class="stat-number" id="violationsCount">8</span>
+                        <div class="stat-actions l4-plus">
+                            <button class="edit-stat-btn" onclick="editStat('violations')">Edit</button>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Site Status</h3>
+                        <span class="stat-status secure" id="siteStatus">SECURE</span>
+                        <div class="stat-actions l4-plus">
+                            <button class="edit-stat-btn" onclick="editStat('status')">Edit</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="recent-activity">
+                    <h3>Recent Activity</h3>
+                    <div class="activity-controls l4-plus">
+                        <button class="add-btn" onclick="showAddForm('activity')">Add Activity</button>
+                    </div>
+                    <div class="activity-log" id="activityLog">
+                        <!-- Activity items will be loaded here dynamically -->
+                    </div>
+                </div>
+            </section>
+
+            <section id="personnel" class="content-section">
+                <h2>Personnel Database</h2>
+                <div class="section-controls l4-plus">
+                    <button class="add-btn" onclick="showAddForm('personnel')">Add New Personnel</button>
+                </div>
+                
+                <div class="personnel-grid" id="personnelGrid">
+                    <!-- Personnel cards will be loaded here dynamically -->
+                </div>
+                
+                <!-- Add Personnel Form -->
+                <div class="form-modal" id="personnelForm" style="display: none;">
+                    <div class="form-content">
+                        <h3>Add New Personnel</h3>
+                        <form id="addPersonnelForm">
+                            <div class="form-group">
+                                <label>Name:</label>
+                                <input type="text" id="personnelName" placeholder="Agent [REDACTED]" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Clearance Level:</label>
+                                <select id="personnelClearance" required>
+                                    <option value="">Select Clearance</option>
+                                    <option value="L1">L1 - Recruit</option>
+                                    <option value="L2">L2 - Agent</option>
+                                    <option value="L3">L3 - Supervisor</option>
+                                    <option value="L4">L4 - Admin</option>
+                                    <option value="L5">L5 - Director</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Position:</label>
+                                <input type="text" id="personnelPosition" placeholder="Position" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Status:</label>
+                                <select id="personnelStatus" required>
+                                    <option value="">Select Status</option>
+                                    <option value="Active">Active</option>
+                                    <option value="Training">Training</option>
+                                    <option value="Suspended">Suspended</option>
+                                    <option value="Terminated">Terminated</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Notes:</label>
+                                <textarea id="personnelNotes" placeholder="Additional notes..." rows="3"></textarea>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="save-btn">Save Personnel</button>
+                                <button type="button" class="cancel-btn" onclick="hideForm('personnel')">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <section id="codex" class="content-section">
+                <h2>Codex Enforcement</h2>
+                <div class="section-controls l1-plus">
+                    <button class="add-btn" onclick="showAddForm('violation')">Add New Violation</button>
+                </div>
+                
+                <div class="codex-rules">
+                    <h3>Enforcement Guidelines</h3>
+                    <ul>
+                        <li>All violations must be documented immediately</li>
+                        <li>Interrogation required for Level 2+ violations</li>
+                        <li>Site lockdown procedures for Level 3+ violations</li>
+                        <li>Directorate notification for Level 4+ violations</li>
+                        <li>Immediate termination for Level 5 violations</li>
+                    </ul>
+                </div>
+                
+                <div class="violation-cases" id="violationCases">
+                    <!-- Violations will be loaded here dynamically -->
+                </div>
+                
+                <!-- Add Violation Form -->
+                <div class="form-modal" id="violationForm" style="display: none;">
+                    <div class="form-content">
+                        <h3>Add New Violation</h3>
+                        <form id="addViolationForm">
+                            <div class="form-group">
+                                <label>Case ID:</label>
+                                <input type="text" id="violationId" placeholder="CASE-2024-XXX" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Violation Level:</label>
+                                <select id="violationLevel" required>
+                                    <option value="">Select Level</option>
+                                    <option value="Level 1">Level 1 - Minor</option>
+                                    <option value="Level 2">Level 2 - Moderate</option>
+                                    <option value="Level 3">Level 3 - Serious</option>
+                                    <option value="Level 4">Level 4 - Critical</option>
+                                    <option value="Level 5">Level 5 - Terminal</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Status:</label>
+                                <select id="violationStatus" required>
+                                    <option value="">Select Status</option>
+                                    <option value="Under Investigation">Under Investigation</option>
+                                    <option value="Pending Review">Pending Review</option>
+                                    <option value="Resolved">Resolved</option>
+                                    <option value="Escalated">Escalated</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Description:</label>
+                                <textarea id="violationDescription" placeholder="Violation details..." rows="4"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Subject:</label>
+                                <input type="text" id="violationSubject" placeholder="Subject name or ID">
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="save-btn">Save Violation</button>
+                                <button type="button" class="cancel-btn" onclick="hideForm('violation')">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <section id="interrogations" class="content-section">
+                <h2>Interrogation Records</h2>
+                <div class="section-controls l1-plus">
+                    <button class="add-btn" onclick="showAddForm('interrogation')">Add New Interrogation</button>
+                </div>
+                
+                <div class="interrogation-schedule" id="interrogationSchedule">
+                    <!-- Interrogations will be loaded here dynamically -->
+                </div>
+                
+                <!-- Add Interrogation Form -->
+                <div class="form-modal" id="interrogationForm" style="display: none;">
+                    <div class="form-content">
+                        <h3>Add New Interrogation</h3>
+                        <form id="addInterrogationForm">
+                            <div class="form-group">
+                                <label>Subject:</label>
+                                <input type="text" id="interrogationSubject" placeholder="Subject: [REDACTED]" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Date & Time:</label>
+                                <input type="text" id="interrogationTime" placeholder="[REDACTED]" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Interrogator:</label>
+                                <input type="text" id="interrogationInterrogator" placeholder="Agent [REDACTED]" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Status:</label>
+                                <select id="interrogationStatus" required>
+                                    <option value="">Select Status</option>
+                                    <option value="Scheduled">Scheduled</option>
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Completed">Completed</option>
+                                    <option value="Cancelled">Cancelled</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Notes:</label>
+                                <textarea id="interrogationNotes" placeholder="Interrogation notes..." rows="4"></textarea>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="save-btn">Save Interrogation</button>
+                                <button type="button" class="cancel-btn" onclick="hideForm('interrogation')">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="interrogation-protocols">
+                    <h3>Standard Protocols</h3>
+                    <ol>
+                        <li>Verify subject identity and clearance</li>
+                        <li>Record all statements verbatim</li>
+                        <li>Document any anomalies or inconsistencies</li>
+                        <li>Submit report within 24 hours</li>
+                        <li>Follow chain of command for escalation</li>
+                    </ol>
+                </div>
+            </section>
+
+            <section id="incidents" class="content-section">
+                <h2>Site-45 Incident Reports</h2>
+                <div class="section-controls l1-plus">
+                    <button class="add-btn" onclick="showAddForm('incident')">Add New Incident</button>
+                </div>
+                
+                <div class="incident-log" id="incidentLog">
+                    <!-- Incidents will be loaded here dynamically -->
+                </div>
+                
+                <!-- Add Incident Form -->
+                <div class="form-modal" id="incidentForm" style="display: none;">
+                    <div class="form-content">
+                        <h3>Add New Incident</h3>
+                        <form id="addIncidentForm">
+                            <div class="form-group">
+                                <label>Date:</label>
+                                <input type="text" id="incidentDate" placeholder="[REDACTED]" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Type:</label>
+                                <select id="incidentType" required>
+                                    <option value="">Select Type</option>
+                                    <option value="Containment Breach">Containment Breach</option>
+                                    <option value="Personnel Incident">Personnel Incident</option>
+                                    <option value="Security Breach">Security Breach</option>
+                                    <option value="Equipment Failure">Equipment Failure</option>
+                                    <option value="Unauthorized Access">Unauthorized Access</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Status:</label>
+                                <select id="incidentStatus" required>
+                                    <option value="">Select Status</option>
+                                    <option value="Under Investigation">Under Investigation</option>
+                                    <option value="Contained">Contained</option>
+                                    <option value="Resolved">Resolved</option>
+                                    <option value="Pending Review">Pending Review</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Description:</label>
+                                <textarea id="incidentDescription" placeholder="Incident details..." rows="3"></textarea>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="save-btn">Save Incident</button>
+                                <button type="button" class="cancel-btn" onclick="hideForm('incident')">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <section id="reports" class="content-section l2-content">
+                <h2>TRD Reports - L2 Clearance Required</h2>
+                <div class="section-controls l4-plus">
+                    <button class="add-btn" onclick="showAddForm('report')">Add New Report</button>
+                </div>
+                
+                <div class="reports-section" id="reportsSection">
+                    <!-- Reports will be loaded here dynamically -->
+                </div>
+                
+                <!-- Add Report Form -->
+                <div class="form-modal" id="reportForm" style="display: none;">
+                    <div class="form-content">
+                        <h3>Add New Report</h3>
+                        <form id="addReportForm">
+                            <div class="form-group">
+                                <label>Report ID:</label>
+                                <input type="text" id="reportId" placeholder="REP-2024-XXX" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Title:</label>
+                                <input type="text" id="reportTitle" placeholder="Report Title" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Status:</label>
+                                <select id="reportStatus" required>
+                                    <option value="">Select Status</option>
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Completed">Completed</option>
+                                    <option value="Pending Review">Pending Review</option>
+                                    <option value="Archived">Archived</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Type:</label>
+                                <select id="reportType" required>
+                                    <option value="">Select Type</option>
+                                    <option value="Codex Violation Report">Codex Violation Report</option>
+                                    <option value="Interrogation Summary">Interrogation Summary</option>
+                                    <option value="Personnel Evaluation">Personnel Evaluation</option>
+                                    <option value="Incident Documentation">Incident Documentation</option>
+                                    <option value="Weekly Summary">Weekly Summary</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Content:</label>
+                                <textarea id="reportContent" placeholder="Report content..." rows="5"></textarea>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="save-btn">Save Report</button>
+                                <button type="button" class="cancel-btn" onclick="hideForm('report')">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="report-templates">
+                    <h3>Report Templates</h3>
+                    <ul>
+                        <li>Codex Violation Report</li>
+                        <li>Interrogation Summary</li>
+                        <li>Personnel Evaluation</li>
+                        <li>Incident Documentation</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="operations" class="content-section l3-content">
+                <h2>TRD Operations - L3 Clearance Required</h2>
+                <div class="section-controls l4-plus">
+                    <button class="add-btn" onclick="showAddForm('operation')">Add New Operation</button>
+                </div>
+                
+                <div class="operations-section" id="operationsSection">
+                    <!-- Operations will be loaded here dynamically -->
+                </div>
+                
+                <!-- Add Operation Form -->
+                <div class="form-modal" id="operationForm" style="display: none;">
+                    <div class="form-content">
+                        <h3>Add New Operation</h3>
+                        <form id="addOperationForm">
+                            <div class="form-group">
+                                <label>Operation ID:</label>
+                                <input type="text" id="operationId" placeholder="OP-2024-XXX" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Operation Name:</label>
+                                <input type="text" id="operationName" placeholder="Operation Name" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Status:</label>
+                                <select id="operationStatus" required>
+                                    <option value="">Select Status</option>
+                                    <option value="Planning">Planning</option>
+                                    <option value="Active">Active</option>
+                                    <option value="Ongoing">Ongoing</option>
+                                    <option value="Completed">Completed</option>
+                                    <option value="Suspended">Suspended</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Type:</label>
+                                <select id="operationType" required>
+                                    <option value="">Select Type</option>
+                                    <option value="Site Security Audit">Site Security Audit</option>
+                                    <option value="Personnel Screening">Personnel Screening</option>
+                                    <option value="Containment Verification">Containment Verification</option>
+                                    <option value="Codex Enforcement">Codex Enforcement</option>
+                                    <option value="Emergency Response">Emergency Response</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Description:</label>
+                                <textarea id="operationDescription" placeholder="Operation details..." rows="4"></textarea>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="save-btn">Save Operation</button>
+                                <button type="button" class="cancel-btn" onclick="hideForm('operation')">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="operation-procedures">
+                    <h3>Standard Operating Procedures</h3>
+                    <ul>
+                        <li>Site-wide security sweeps</li>
+                        <li>Personnel background checks</li>
+                        <li>Containment protocol verification</li>
+                        <li>Emergency response coordination</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="classified" class="content-section l4-content">
+                <h2>Classified Information - L4 Clearance Required</h2>
+                <div class="classified-warning">
+                    <p>⚠️ CLASSIFIED INFORMATION - UNAUTHORIZED ACCESS WILL RESULT IN IMMEDIATE TERMINATION ⚠️</p>
+                </div>
+                
+                <div class="classified-content">
+                    <h3>Advanced Interrogation Techniques</h3>
+                    <ul>
+                        <li>Neural interrogation methods</li>
+                        <li>Memory extraction procedures</li>
+                        <li>Truth serum administration protocols</li>
+                        <li>Psychological manipulation techniques</li>
+                        <li>Behavioral modification programs</li>
+                    </ul>
+                    
+                    <h3>Undercover Operations</h3>
+                    <p>Active undercover agents within Site-45:</p>
+                    <div class="agent-list">
+                        <div class="agent-item">
+                            <span>Agent [REDACTED] - Infiltration Specialist</span>
+                            <span class="status active">Active</span>
+                        </div>
+                        <div class="agent-item">
+                            <span>Agent [REDACTED] - Surveillance Expert</span>
+                            <span class="status active">Active</span>
+                        </div>
+                    </div>
+                    
+                    <h3>Experimental Procedures</h3>
+                    <ul>
+                        <li>Advanced lie detection systems</li>
+                        <li>Memory modification techniques</li>
+                        <li>Behavioral prediction algorithms</li>
+                        <li>Neural interface development</li>
+                        <li>Consciousness transfer research</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="directorate" class="content-section l5-content">
+                <h2>Directorate Access - L5 Clearance Required</h2>
+                <div class="directorate-warning">
+                    <p>🚨 DIRECTORATE LEVEL ACCESS - HIGHEST CLEARANCE REQUIRED 🚨</p>
+                </div>
+                
+                <div class="directorate-content">
+                    <h3>Site-45 Deep Secrets</h3>
+                    <ul>
+                        <li>Reality manipulation experiments</li>
+                        <li>Cross-dimensional containment protocols</li>
+                        <li>Time-loop prevention measures</li>
+                        <li>Consciousness transfer research</li>
+                        <li>Dimensional sealing procedures</li>
+                    </ul>
+                    
+                    <h3>Foundation Black Projects</h3>
+                    <ul>
+                        <li>Project [REDACTED] - Reality stabilization</li>
+                        <li>Project [REDACTED] - Memory manipulation</li>
+                        <li>Project [REDACTED] - Dimensional sealing</li>
+                        <li>Project [REDACTED] - Temporal containment</li>
+                        <li>Project [REDACTED] - Consciousness transfer</li>
+                    </ul>
+                    
+                    <h3>O5 Council Directives</h3>
+                    <div class="directive-item">
+                        <span class="directive-id">DIRECTIVE-001</span>
+                        <span class="directive-content">Maintain absolute secrecy regarding Site-45's true purpose</span>
+                    </div>
+                    <div class="directive-item">
+                        <span class="directive-id">DIRECTIVE-002</span>
+                        <span class="directive-content">Eliminate any personnel who discover the truth</span>
+                    </div>
+                    <div class="directive-item">
+                        <span class="directive-id">DIRECTIVE-003</span>
+                        <span class="directive-content">Prepare for potential reality collapse scenario</span>
+                    </div>
+                    
+                    <h3>Emergency Protocols</h3>
+                    <ul>
+                        <li>Activate Site-45 self-destruct sequence</li>
+                        <li>Initiate memory wipe of all personnel</li>
+                        <li>Deploy reality anchors</li>
+                        <li>Contact O5 Council immediately</li>
+                        <li>Execute dimensional lockdown procedures</li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 

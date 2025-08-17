@@ -1,0 +1,720 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Courier New', monospace;
+    background: #0a0a0a;
+    color: #00ff00;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+    border-bottom: 2px solid #00ff00;
+    margin-bottom: 30px;
+}
+
+.header-controls {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.logout-btn {
+    background: #ff0000;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    font-family: 'Courier New', monospace;
+    transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+    background: #cc0000;
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+}
+
+.logo h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    text-shadow: 0 0 10px #00ff00;
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    color: #888;
+    margin-left: 10px;
+}
+
+.clearance-badge {
+    background: #00ff00;
+    color: #000;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.login-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh;
+}
+
+.login-card {
+    background: #1a1a1a;
+    border: 2px solid #00ff00;
+    border-radius: 10px;
+    padding: 40px;
+    text-align: center;
+    max-width: 400px;
+    width: 100%;
+}
+
+.login-card h2 {
+    margin-bottom: 20px;
+    color: #00ff00;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    background: #000;
+    border: 1px solid #00ff00;
+    color: #00ff00;
+    border-radius: 5px;
+}
+
+.auth-btn {
+    background: #00ff00;
+    color: #000;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.demo-credentials {
+    margin-top: 30px;
+    padding: 20px;
+    background: #000;
+    border-radius: 5px;
+}
+
+.demo-credentials h3 {
+    color: #00ff00;
+    margin-bottom: 15px;
+}
+
+.demo-credentials p {
+    margin: 5px 0;
+    color: #ccc;
+}
+
+.nav-menu {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.nav-btn {
+    background: #1a1a1a;
+    border: 1px solid #00ff00;
+    color: #00ff00;
+    padding: 12px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.nav-btn:hover, .nav-btn.active {
+    background: #00ff00;
+    color: #000;
+}
+
+.nav-btn.l2-only, .nav-btn.l3-only, .nav-btn.l4-only, .nav-btn.l5-only {
+    display: none;
+}
+
+.content-section {
+    display: none;
+    background: #1a1a1a;
+    border: 1px solid #00ff00;
+    border-radius: 10px;
+    padding: 30px;
+    margin-bottom: 20px;
+}
+
+.content-section.active {
+    display: block;
+}
+
+.content-section h2 {
+    color: #00ff00;
+    margin-bottom: 20px;
+    font-size: 2rem;
+}
+
+/* Section Controls */
+.section-controls {
+    margin-bottom: 20px;
+}
+
+.add-btn {
+    background: #00ff00;
+    color: #000;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.add-btn:hover {
+    background: #00cc00;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+}
+
+/* Permission-based Elements */
+.l1-plus {
+    display: none;
+}
+
+.l4-plus {
+    display: none;
+}
+
+.l1-plus.active, .l4-plus.active {
+    display: block;
+}
+
+/* Dashboard Stats */
+.stat-card {
+    position: relative;
+    background: #000;
+    border: 1px solid #00ff00;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+}
+
+.stat-actions {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.edit-stat-btn {
+    background: #ffff00;
+    color: #000;
+    border: none;
+    padding: 3px 8px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.7rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.edit-stat-btn:hover {
+    background: #cccc00;
+}
+
+/* Activity Controls */
+.activity-controls {
+    margin-bottom: 15px;
+}
+
+.activity-controls .add-btn {
+    font-size: 0.9rem;
+    padding: 8px 15px;
+}
+
+/* Form Modal */
+.form-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.form-content {
+    background: #1a1a1a;
+    border: 2px solid #00ff00;
+    border-radius: 10px;
+    padding: 30px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.form-content h3 {
+    color: #00ff00;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    color: #00ff00;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    background: #000;
+    border: 1px solid #00ff00;
+    color: #00ff00;
+    border-radius: 5px;
+    font-family: 'Courier New', monospace;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.save-btn, .cancel-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.save-btn {
+    background: #00ff00;
+    color: #000;
+}
+
+.save-btn:hover {
+    background: #00cc00;
+}
+
+.cancel-btn {
+    background: #ff0000;
+    color: #fff;
+}
+
+.cancel-btn:hover {
+    background: #cc0000;
+}
+
+/* Dynamic Content Styling */
+.no-data {
+    text-align: center;
+    color: #888;
+    font-style: italic;
+    padding: 20px;
+}
+
+.incident-item, .report-item, .operation-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background: #000;
+    border: 1px solid #00ff00;
+    border-radius: 8px;
+    margin: 10px 0;
+    transition: all 0.3s ease;
+}
+
+.incident-item:hover, .report-item:hover, .operation-item:hover {
+    border-color: #00cc00;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+}
+
+.incident-info, .report-info, .operation-info {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    flex: 1;
+}
+
+.incident-actions, .report-actions, .operation-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.edit-btn, .delete-btn {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.edit-btn {
+    background: #ffff00;
+    color: #000;
+}
+
+.edit-btn:hover {
+    background: #cccc00;
+}
+
+.delete-btn {
+    background: #ff0000;
+    color: #fff;
+}
+
+.delete-btn:hover {
+    background: #cc0000;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-card h3 {
+    color: #888;
+    margin-bottom: 10px;
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #00ff00;
+}
+
+.stat-status {
+    font-size: 1.5rem;
+    font-weight: bold;
+    padding: 5px 15px;
+    border-radius: 5px;
+}
+
+.stat-status.secure {
+    background: #00ff00;
+    color: #000;
+}
+
+.recent-activity {
+    background: #000;
+    border: 1px solid #00ff00;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.recent-activity h3 {
+    color: #00ff00;
+    margin-bottom: 15px;
+}
+
+.activity-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #333;
+}
+
+.activity-item:last-child {
+    border-bottom: none;
+}
+
+.activity-info {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex: 1;
+}
+
+.activity-actions {
+    display: flex;
+    gap: 5px;
+}
+
+.timestamp {
+    color: #888;
+    font-size: 0.9rem;
+}
+
+.personnel-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.personnel-card {
+    position: relative;
+    background: #000;
+    border: 1px solid #00ff00;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.personnel-card h3 {
+    color: #00ff00;
+    margin-bottom: 10px;
+}
+
+.personnel-card p {
+    margin: 5px 0;
+    color: #ccc;
+}
+
+.personnel-actions {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    gap: 5px;
+}
+
+.codex-rules, .interrogation-protocols, .report-templates, .operation-procedures {
+    background: #000;
+    border: 1px solid #00ff00;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.codex-rules h3, .interrogation-protocols h3, .report-templates h3, .operation-procedures h3 {
+    color: #00ff00;
+    margin-bottom: 15px;
+}
+
+.codex-rules ul, .interrogation-protocols ol, .report-templates ul, .operation-procedures ul {
+    margin-left: 20px;
+}
+
+.codex-rules li, .interrogation-protocols li, .report-templates li, .operation-procedures li {
+    margin: 8px 0;
+    color: #ccc;
+}
+
+.violation-cases, .interrogation-schedule, .incident-log, .reports-section, .operations-section {
+    background: #000;
+    border: 1px solid #00ff00;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.violation-cases h3, .interrogation-schedule h3, .incident-log h3, .reports-section h3, .operations-section h3 {
+    color: #00ff00;
+    margin-bottom: 15px;
+}
+
+.case-item, .interrogation-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background: #1a1a1a;
+    border-radius: 5px;
+    margin: 5px 0;
+}
+
+.case-level {
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-weight: bold;
+    font-size: 0.8rem;
+}
+
+.case-level.level-1 {
+    background: #00ff00;
+    color: #000;
+}
+
+.case-level.level-2 {
+    background: #ffff00;
+    color: #000;
+}
+
+.case-level.level-3 {
+    background: #ff6600;
+    color: #fff;
+}
+
+.case-status {
+    color: #ccc;
+}
+
+.classified-warning, .directorate-warning {
+    background: #ff0000;
+    color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: bold;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 1; }
+}
+
+.classified-content, .directorate-content {
+    background: #000;
+    border: 1px solid #ff0000;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.classified-content h3, .directorate-content h3 {
+    color: #ff0000;
+    margin: 20px 0 10px 0;
+}
+
+.classified-content ul, .directorate-content ul {
+    margin-left: 20px;
+    margin-bottom: 20px;
+}
+
+.classified-content li, .directorate-content li {
+    margin: 8px 0;
+    color: #ccc;
+}
+
+.agent-list {
+    margin: 15px 0;
+}
+
+.agent-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background: #1a1a1a;
+    border-radius: 5px;
+    margin: 5px 0;
+}
+
+.status.active {
+    color: #00ff00;
+    font-weight: bold;
+}
+
+.directive-item {
+    display: flex;
+    gap: 15px;
+    padding: 10px;
+    background: #1a1a1a;
+    border-radius: 5px;
+    margin: 10px 0;
+    border-left: 3px solid #ff0000;
+}
+
+.directive-id {
+    color: #ff0000;
+    font-weight: bold;
+    min-width: 120px;
+}
+
+.directive-content {
+    color: #ccc;
+}
+
+.l2-content, .l3-content, .l4-content, .l5-content {
+    display: none;
+}
+
+.l2-content.active, .l3-content.active, .l4-content.active, .l5-content.active {
+    display: block;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+    
+    .header {
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .logo h1 {
+        font-size: 2rem;
+    }
+    
+    .nav-menu {
+        flex-direction: column;
+    }
+    
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .incident-item, .report-item, .operation-item {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .incident-info, .report-info, .operation-info {
+        flex-direction: column;
+        gap: 5px;
+        text-align: center;
+    }
+    
+    .form-content {
+        width: 95%;
+        padding: 20px;
+    }
+    
+    .personnel-card {
+        padding: 15px;
+    }
+    
+    .personnel-actions {
+        position: static;
+        margin-top: 10px;
+        justify-content: center;
+    }
+} 
