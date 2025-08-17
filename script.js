@@ -42,6 +42,7 @@ function authenticate() {
         document.getElementById('loginSection').style.display = 'none';
         document.getElementById('mainContent').style.display = 'block';
         document.getElementById('logoutBtn').style.display = 'block';
+        document.getElementById('refreshBtn').style.display = 'block';
         
         // Show/hide navigation buttons based on clearance
         updateNavigationVisibility();
@@ -70,6 +71,7 @@ function logout() {
     document.getElementById('loginSection').style.display = 'flex';
     document.getElementById('mainContent').style.display = 'none';
     document.getElementById('logoutBtn').style.display = 'none';
+    document.getElementById('refreshBtn').style.display = 'none';
     
     // Clear form fields
     document.getElementById('username').value = '';
@@ -924,7 +926,15 @@ async function saveToCloud() {
 
 async function loadFromCloud() {
     try {
-        const response = await fetch(CLOUD_STORAGE_URL);
+        // Add cache-busting parameter to prevent browser caching
+        const url = CLOUD_STORAGE_URL + '?t=' + Date.now();
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache'
+            }
+        });
         if (response.ok) {
             const result = await response.json();
             const data = result.record;
@@ -986,8 +996,44 @@ function loadFromLocalStorage() {
     if (savedStats) dashboardStats = JSON.parse(savedStats);
 }
 
-// Auto-refresh function to sync data every 30 seconds
+// Manual refresh function
+async function manualRefresh() {
+    const refreshBtn = document.getElementById('refreshBtn');
+    refreshBtn.textContent = '🔄 SYNCING...';
+    refreshBtn.disabled = true;
+    
+    try {
+        await loadFromCloud();
+        if (currentUser) {
+            loadSectionData();
+            updateDashboardStats();
+        }
+        refreshBtn.textContent = '✅ SYNCED';
+        setTimeout(() => {
+            refreshBtn.textContent = '🔄 SYNC';
+            refreshBtn.disabled = false;
+        }, 2000);
+    } catch (error) {
+        refreshBtn.textContent = '❌ ERROR';
+        setTimeout(() => {
+            refreshBtn.textContent = '🔄 SYNC';
+            refreshBtn.disabled = false;
+        }, 2000);
+    }
+}
+
+// Auto-refresh function to sync data every 10 seconds
 function startAutoSync() {
+    // Initial sync after 2 seconds
+    setTimeout(async () => {
+        await loadFromCloud();
+        if (currentUser) {
+            loadSectionData();
+            updateDashboardStats();
+        }
+    }, 2000);
+    
+    // Then sync every 10 seconds
     setInterval(async () => {
         await loadFromCloud();
         // Refresh current section if user is logged in
@@ -995,7 +1041,7 @@ function startAutoSync() {
             loadSectionData();
             updateDashboardStats();
         }
-    }, 30000); // 30 seconds
+    }, 10000); // 10 seconds
 }
 
 // Add enter key support for login

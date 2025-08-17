@@ -32,6 +32,28 @@ body {
     gap: 20px;
 }
 
+.refresh-btn {
+    background: #0066cc;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    font-family: 'Courier New', monospace;
+    transition: all 0.3s ease;
+    margin-right: 10px;
+}
+
+.refresh-btn:hover {
+    background: #0052a3;
+}
+
+.refresh-btn:disabled {
+    background: #666;
+    cursor: not-allowed;
+}
+
 .logout-btn {
     background: #ff0000;
     color: #fff;

@@ -13,12 +13,13 @@
                 <h1>TRD</h1>
                 <span class="subtitle">The Regulations Department</span>
             </div>
-            <div class="header-controls">
-                <div class="clearance-display">
-                    <span class="clearance-badge" id="currentClearance">L1</span>
-                </div>
-                <button class="logout-btn" id="logoutBtn" onclick="logout()" style="display: none;">LOGOUT</button>
+                    <div class="header-controls">
+            <div class="clearance-display">
+                <span class="clearance-badge" id="currentClearance">L1</span>
             </div>
+            <button class="refresh-btn" id="refreshBtn" onclick="manualRefresh()" style="display: none;">🔄 SYNC</button>
+            <button class="logout-btn" id="logoutBtn" onclick="logout()" style="display: none;">LOGOUT</button>
+        </div>
         </header>
 
         <div class="login-section" id="loginSection">
@@ -113,11 +114,11 @@
                                 <label>Clearance Level:</label>
                                 <select id="personnelClearance" required>
                                     <option value="">Select Clearance</option>
-                                    <option value="L1">Level 1</option>
-                                    <option value="L2">Level 2</option>
-                                    <option value="L3">Level 3</option>
-                                    <option value="L4">Level 4</option>
-                                    <option value="L5">Level 5</option>
+                                    <option value="L1">L1 - Recruit</option>
+                                    <option value="L2">L2 - Agent</option>
+                                    <option value="L3">L3 - Supervisor</option>
+                                    <option value="L4">L4 - Admin</option>
+                                    <option value="L5">L5 - Director</option>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -558,5 +559,4 @@
 
     <script src="script.js"></script>
 </body>
-
 </html> 
