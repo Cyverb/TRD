@@ -260,7 +260,7 @@ function editStat(statType) {
                 break;
         }
         updateDashboardStats();
-        saveToLocalStorage();
+        saveToCloud();
         addActivity(`Dashboard stat updated: ${statType} changed to ${newValue}`);
     }
 }
@@ -299,7 +299,7 @@ function addActivity(message) {
     activities.unshift({ timestamp, message });
     if (activities.length > 50) activities.pop(); // Keep only last 50 activities
     renderActivities();
-    saveToLocalStorage();
+    saveToCloud();
 }
 
 function deleteActivity(index) {
@@ -307,7 +307,7 @@ function deleteActivity(index) {
     if (confirm('Delete this activity?')) {
         activities.splice(index, 1);
         renderActivities();
-        saveToLocalStorage();
+        saveToCloud();
     }
 }
 
@@ -366,7 +366,7 @@ function addPersonnel(event) {
     personnel.push(person);
     hideForm('personnel');
     renderPersonnel();
-    saveToLocalStorage();
+    saveToCloud();
     addActivity(`New personnel added: ${person.name} (${person.clearance})`);
     updateDashboardStats();
 }
@@ -400,7 +400,7 @@ function updatePersonnel(event, index) {
     
     hideForm('personnel');
     renderPersonnel();
-    saveToLocalStorage();
+    saveToCloud();
     addActivity(`Personnel updated: ${personnel[index].name}`);
     
     document.getElementById('addPersonnelForm').onsubmit = addPersonnel;
@@ -411,7 +411,7 @@ function deletePersonnel(index) {
         const personName = personnel[index].name;
         personnel.splice(index, 1);
         renderPersonnel();
-        saveToLocalStorage();
+        saveToCloud();
         addActivity(`Personnel removed: ${personName}`);
     }
 }
@@ -460,7 +460,7 @@ function addViolation(event) {
     violations.push(violation);
     hideForm('violation');
     renderViolations();
-    saveToLocalStorage();
+    saveToCloud();
     addActivity(`New violation recorded: ${violation.id} (${violation.level})`);
     updateDashboardStats();
 }
@@ -494,7 +494,7 @@ function updateViolation(event, index) {
     
     hideForm('violation');
     renderViolations();
-    saveToLocalStorage();
+    saveToCloud();
     addActivity(`Violation updated: ${violations[index].id}`);
     
     document.getElementById('addViolationForm').onsubmit = addViolation;
@@ -505,7 +505,7 @@ function deleteViolation(index) {
         const violationId = violations[index].id;
         violations.splice(index, 1);
         renderViolations();
-        saveToLocalStorage();
+        saveToCloud();
         addActivity(`Violation deleted: ${violationId}`);
     }
 }
@@ -554,7 +554,7 @@ function addInterrogation(event) {
     interrogations.push(interrogation);
     hideForm('interrogation');
     renderInterrogations();
-    saveToLocalStorage();
+    saveToCloud();
     addActivity(`New interrogation scheduled: ${interrogation.subject}`);
 }
 
@@ -587,7 +587,7 @@ function updateInterrogation(event, index) {
     
     hideForm('interrogation');
     renderInterrogations();
-    saveToLocalStorage();
+    saveToCloud();
     addActivity(`Interrogation updated: ${interrogations[index].subject}`);
     
     document.getElementById('addInterrogationForm').onsubmit = addInterrogation;
@@ -598,7 +598,7 @@ function deleteInterrogation(index) {
         const subject = interrogations[index].subject;
         interrogations.splice(index, 1);
         renderInterrogations();
-        saveToLocalStorage();
+        saveToCloud();
         addActivity(`Interrogation cancelled: ${subject}`);
     }
 }
@@ -645,7 +645,7 @@ function addIncident(event) {
     incidents.push(incident);
     hideForm('incident');
     renderIncidents();
-    saveToLocalStorage();
+    saveToCloud();
     addActivity(`New incident reported: ${incident.type}`);
 }
 
@@ -676,7 +676,7 @@ function updateIncident(event, index) {
     
     hideForm('incident');
     renderIncidents();
-    saveToLocalStorage();
+    saveToCloud();
     addActivity(`Incident updated: ${incidents[index].type}`);
     
     document.getElementById('addIncidentForm').onsubmit = addIncident;
@@ -687,7 +687,7 @@ function deleteIncident(index) {
         const incidentType = incidents[index].type;
         incidents.splice(index, 1);
         renderIncidents();
-        saveToLocalStorage();
+        saveToCloud();
         addActivity(`Incident deleted: ${incidentType}`);
     }
 }
@@ -737,7 +737,7 @@ function addReport(event) {
     reports.push(report);
     hideForm('report');
     renderReports();
-    saveToLocalStorage();
+    saveToCloud();
     addActivity(`New report created: ${report.id}`);
 }
 
@@ -770,7 +770,7 @@ function updateReport(event, index) {
     
     hideForm('report');
     renderReports();
-    saveToLocalStorage();
+    saveToCloud();
     addActivity(`Report updated: ${reports[index].id}`);
     
     document.getElementById('addReportForm').onsubmit = addReport;
@@ -781,7 +781,7 @@ function deleteReport(index) {
         const reportId = reports[index].id;
         reports.splice(index, 1);
         renderReports();
-        saveToLocalStorage();
+        saveToCloud();
         addActivity(`Report deleted: ${reportId}`);
     }
 }
@@ -831,7 +831,7 @@ function addOperation(event) {
     operations.push(operation);
     hideForm('operation');
     renderOperations();
-    saveToLocalStorage();
+    saveToCloud();
     addActivity(`New operation initiated: ${operation.id}`);
 }
 
@@ -864,7 +864,7 @@ function updateOperation(event, index) {
     
     hideForm('operation');
     renderOperations();
-    saveToLocalStorage();
+    saveToCloud();
     addActivity(`Operation updated: ${operations[index].id}`);
     
     document.getElementById('addOperationForm').onsubmit = addOperation;
@@ -875,12 +875,86 @@ function deleteOperation(index) {
         const operationId = operations[index].id;
         operations.splice(index, 1);
         renderOperations();
-        saveToLocalStorage();
+        saveToCloud();
         addActivity(`Operation terminated: ${operationId}`);
     }
 }
 
-// Local storage functions
+// Cloud storage configuration
+const CLOUD_STORAGE_URL = 'https://api.jsonbin.io/v3/b/68a19cb0d0ea881f405b55ea'; // You'll need to create a JSONBin account
+const CLOUD_API_KEY = '$2a$10$2NFvkwWjgQwUldqzvMlZn.bmcwyExb44qdq3U7Q8mG6AwU39pasom'; // Your JSONBin API key
+
+// Cloud storage functions
+async function saveToCloud() {
+    const data = {
+        incidents: incidents,
+        reports: reports,
+        operations: operations,
+        personnel: personnel,
+        violations: violations,
+        interrogations: interrogations,
+        activities: activities,
+        dashboardStats: dashboardStats,
+        lastUpdated: new Date().toISOString()
+    };
+    
+    try {
+        const response = await fetch(CLOUD_STORAGE_URL, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Master-Key': CLOUD_API_KEY
+            },
+            body: JSON.stringify(data)
+        });
+        
+        if (response.ok) {
+            console.log('Data saved to cloud successfully');
+            // Also save to local storage as backup
+            saveToLocalStorage();
+        } else {
+            console.error('Failed to save to cloud, using local storage only');
+            saveToLocalStorage();
+        }
+    } catch (error) {
+        console.error('Cloud save failed, using local storage:', error);
+        saveToLocalStorage();
+    }
+}
+
+async function loadFromCloud() {
+    try {
+        const response = await fetch(CLOUD_STORAGE_URL);
+        if (response.ok) {
+            const result = await response.json();
+            const data = result.record;
+            
+            incidents = data.incidents || [];
+            reports = data.reports || [];
+            operations = data.operations || [];
+            personnel = data.personnel || [];
+            violations = data.violations || [];
+            interrogations = data.interrogations || [];
+            activities = data.activities || [];
+            dashboardStats = data.dashboardStats || {
+                activePersonnel: 47,
+                openCases: 12,
+                violations: 8,
+                siteStatus: 'SECURE'
+            };
+            
+            console.log('Data loaded from cloud successfully');
+        } else {
+            console.log('Cloud load failed, trying local storage');
+            loadFromLocalStorage();
+        }
+    } catch (error) {
+        console.error('Cloud load failed, using local storage:', error);
+        loadFromLocalStorage();
+    }
+}
+
+// Local storage functions (as backup)
 function saveToLocalStorage() {
     localStorage.setItem('trd_incidents', JSON.stringify(incidents));
     localStorage.setItem('trd_reports', JSON.stringify(reports));
@@ -912,10 +986,25 @@ function loadFromLocalStorage() {
     if (savedStats) dashboardStats = JSON.parse(savedStats);
 }
 
+// Auto-refresh function to sync data every 30 seconds
+function startAutoSync() {
+    setInterval(async () => {
+        await loadFromCloud();
+        // Refresh current section if user is logged in
+        if (currentUser) {
+            loadSectionData();
+            updateDashboardStats();
+        }
+    }, 30000); // 30 seconds
+}
+
 // Add enter key support for login
-document.addEventListener('DOMContentLoaded', function() {
-    // Load saved data
-    loadFromLocalStorage();
+document.addEventListener('DOMContentLoaded', async function() {
+    // Load data from cloud (with local fallback)
+    await loadFromCloud();
+    
+    // Start auto-sync for real-time updates
+    startAutoSync();
     
     const passwordInput = document.getElementById('password');
     if (passwordInput) {
