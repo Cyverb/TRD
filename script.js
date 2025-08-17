@@ -883,7 +883,7 @@ function deleteOperation(index) {
 }
 
 // Cloud storage configuration
-const CLOUD_STORAGE_URL = 'https://api.jsonbin.io/v3/b/68a19cb0d0ea881f405b55ea'; // You'll need to create a JSONBin account
+const CLOUD_STORAGE_URL = 'https://api.jsonbin.io/v3/b/68a19cb0d0ea881f405b55ea/latest'; // You'll need to create a JSONBin account
 const CLOUD_API_KEY = '$2a$10$2NFvkwWjgQwUldqzvMlZn.bmcwyExb44qdq3U7Q8mG6AwU39pasom'; // Your JSONBin API key
 
 // Cloud storage functions
@@ -932,6 +932,7 @@ async function loadFromCloud() {
         const response = await fetch(url, {
             method: 'GET',
             headers: {
+                'X-Master-Key': CLOUD_API_KEY,
                 'Cache-Control': 'no-cache, no-store, must-revalidate',
                 'Pragma': 'no-cache',
                 'Expires': '0'
