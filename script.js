@@ -927,12 +927,14 @@ async function saveToCloud() {
 async function loadFromCloud() {
     try {
         // Add cache-busting parameter to prevent browser caching
-        const url = CLOUD_STORAGE_URL + '?t=' + Date.now();
+        const timestamp = Date.now();
+        const url = CLOUD_STORAGE_URL + '?t=' + timestamp + '&v=' + Math.random();
         const response = await fetch(url, {
             method: 'GET',
             headers: {
-                'Cache-Control': 'no-cache',
-                'Pragma': 'no-cache'
+                'Cache-Control': 'no-cache, no-store, must-revalidate',
+                'Pragma': 'no-cache',
+                'Expires': '0'
             }
         });
         if (response.ok) {
@@ -1003,17 +1005,28 @@ async function manualRefresh() {
     refreshBtn.disabled = true;
     
     try {
+        // Force clear any cached data
+        localStorage.clear();
+        
+        // Load fresh data from cloud
         await loadFromCloud();
+        
         if (currentUser) {
             loadSectionData();
             updateDashboardStats();
         }
+        
         refreshBtn.textContent = '✅ SYNCED';
         setTimeout(() => {
             refreshBtn.textContent = '🔄 SYNC';
             refreshBtn.disabled = false;
         }, 2000);
+        
+        // Show success message
+        console.log('Manual sync completed successfully');
+        
     } catch (error) {
+        console.error('Manual sync failed:', error);
         refreshBtn.textContent = '❌ ERROR';
         setTimeout(() => {
             refreshBtn.textContent = '🔄 SYNC';
@@ -1022,18 +1035,17 @@ async function manualRefresh() {
     }
 }
 
-// Auto-refresh function to sync data every 10 seconds
+// Auto-refresh function to sync data every 5 seconds
 function startAutoSync() {
-    // Initial sync after 2 seconds
-    setTimeout(async () => {
-        await loadFromCloud();
+    // Initial sync immediately
+    loadFromCloud().then(() => {
         if (currentUser) {
             loadSectionData();
             updateDashboardStats();
         }
-    }, 2000);
+    });
     
-    // Then sync every 10 seconds
+    // Then sync every 5 seconds
     setInterval(async () => {
         await loadFromCloud();
         // Refresh current section if user is logged in
@@ -1041,16 +1053,31 @@ function startAutoSync() {
             loadSectionData();
             updateDashboardStats();
         }
-    }, 10000); // 10 seconds
+    }, 5000); // 5 seconds
 }
 
 // Add enter key support for login
 document.addEventListener('DOMContentLoaded', async function() {
+    console.log('Page loaded, initializing...');
+    
     // Load data from cloud (with local fallback)
     await loadFromCloud();
     
     // Start auto-sync for real-time updates
     startAutoSync();
+    
+    // Add page visibility change listener for mobile
+    document.addEventListener('visibilitychange', function() {
+        if (!document.hidden) {
+            console.log('Page became visible, refreshing data...');
+            loadFromCloud().then(() => {
+                if (currentUser) {
+                    loadSectionData();
+                    updateDashboardStats();
+                }
+            });
+        }
+    });
     
     const passwordInput = document.getElementById('password');
     if (passwordInput) {
