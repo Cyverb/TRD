@@ -1,11 +1,11 @@
 // Clearance levels and credentials
 const credentials = {
-    'master': { password: 'trdmaster2024', clearance: 'MASTER' },
-    'recruit': { password: 'basic', clearance: 'L1' },
-    'agent': { password: 'standard', clearance: 'L2' },
-    'supervisor': { password: 'advanced', clearance: 'L3' },
-    'admin': { password: 'trd2024', clearance: 'L4' },
-    'director': { password: 'classified', clearance: 'L5' }
+    'Master': { password: 'TRDMaster20252', clearance: 'MASTER' },
+    'Level1': { password: 'TRDL1', clearance: 'L1' },
+    'Level2': { password: 'TRDL2259', clearance: 'L2' },
+    'Level3': { password: 'TRDL32945', clearance: 'L3' },
+    'Level4': { password: 'TRDL49844', clearance: 'L4' },
+    'Level5': { password: 'TRDL592855', clearance: 'L5' }
 };
 
 let currentClearance = 'L1';
